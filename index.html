@@ -439,13 +439,17 @@
             let final = hText + "\n";
             for (let i = 0; i < outputs.length; i++) {
                 final += outputs[i];
-                if (i < outputs.length - 1 && mode !== 'disabled') {
-                    const isC = (mode === 'custom');
-                    const sepTa = document.getElementById(`ta_sep_${i}`);
-                    const sepText = isC ? (sepTa.value || sepTa.placeholder) : (universalSep.text || "---");
-                    const dis = isC ? !!disabledSeps[i] : universalSep.disabled;
-                    if (!dis) final += "\n" + sepText.replace(/\\n/g, "\n").replace(/\\t/g, "\t") + "\n";
-                    else final += "\n";
+                if (i < outputs.length - 1) { // MODIFIED: Removed '&& mode !== "disabled"'
+                    if (mode !== 'disabled') {
+                        const isC = (mode === 'custom');
+                        const sepTa = document.getElementById(`ta_sep_${i}`);
+                        const sepText = isC ? (sepTa.value || sepTa.placeholder) : (universalSep.text || "---");
+                        const dis = isC ? !!disabledSeps[i] : universalSep.disabled;
+                        if (!dis) final += "\n" + sepText.replace(/\\n/g, "\n").replace(/\\t/g, "\t") + "\n";
+                        else final += "\n";
+                    } else {
+                        final += "\n"; // ADDED: Ensures newline when separators are Off
+                    }
                 }
             }
             final += "\n" + fText;
