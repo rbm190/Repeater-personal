@@ -4,6 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Repeater | Advanced Multi-Block Text Repeater</title>
+    <meta name="description" content="A professional text repeater with multi-block support, smart sequencing, and custom separators. Perfect for developers and content creators.">
+    <meta name="keywords" content="text repeater, sequence generator, bulk text, list builder, increment number, series generator">
+    <meta name="author" content="Text Studio">
+    <meta property="og:title" content="Text Repeater: Pro Text Repeater">
+    <meta property="og:description" content="Generate complex text sequences with multiple blocks and custom logic instantly.">
+    <meta property="og:type" content="website">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧬</text></svg>">
     <style>
         :root {
             --bg: #f8fafc;
@@ -305,7 +314,9 @@
 
     <div class="header-card">
         <div class="header-top">
-            <h3 style="margin:0; font-size: 18px;">Text Studio</h3>
+            <h3 style="margin:0; font-size: 18px; letter-spacing: -0.5px;">
+                <span style="color:var(--accent)">Text</span> Repeater
+            </h3>
             <div style="display:flex; gap:8px;">
                 <select id="sepMode" onchange="renderUI()">
                     <option value="disabled">Separators Off</option>
@@ -431,7 +442,7 @@
                 const contentRaw = ta.value || ta.placeholder;
                 const finalContent = contentRaw.replace(/\\n/g, "\n").replace(/\\t/g, "\t");
                 for (let v = s.start; v <= s.end; v++) {
-                    block += finalContent.replace(/{}/g, s.mode === 'i' ? v : s.start) + "\n";
+                    block += finalContent.replace(/\$₹\$/g, s.mode === 'i' ? v : s.start) + "\n";
                 }
                 outputs.push(block.trim());
             });
@@ -530,7 +541,7 @@
                         <div class="quick-tools">
                             <button class="tool-btn" onclick="insertAtCursor('ta_s_${index}', '\\n', ${index})">+ Line</button>
                             <button class="tool-btn" onclick="insertAtCursor('ta_s_${index}', '\\t', ${index})">+ Tab</button>
-                            <button class="tool-btn" onclick="insertAtCursor('ta_s_${index}', '{}', ${index})">+ Series {}</button>
+                            <button class="tool-btn" onclick="insertAtCursor('ta_s_${index}', '$₹$', ${index})">+ Series $₹$</button>
                         </div>
                         <div class="range-inputs"><span>Count:</span> <input type="number" value="${s.start}" onchange="sentences[${index}].start=parseInt(this.value)"> <span>to</span> <input type="number" value="${s.end}" onchange="sentences[${index}].end=parseInt(this.value)"></div>
                     </div>`;
