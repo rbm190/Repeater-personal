@@ -478,6 +478,21 @@
             }
         }
 
+        function duplicateS(i) {
+            // Create a deep copy of the sentence object
+            const original = sentences[i];
+            const duplicate = {
+                ...original,
+                id: Date.now(),
+                name: original.name + " (Copy)",
+                // We use the same content and range settings
+            };
+
+            // Insert the duplicate immediately after the original
+            sentences.splice(i + 1, 0, duplicate);
+            renderUI();
+        }
+
         function renderUI() {
             const container = document.getElementById('mainContainer'), mode = document.getElementById('sepMode').value;
             container.innerHTML = '';
@@ -489,7 +504,10 @@
                         <button class="collapse-btn toggle-icon" onclick="toggleCollapse('s_body_${index}', this)">▼</button>
                         <span contenteditable="true" onblur="sentences[${index}].name=this.innerText; renderOrder()">${s.name}</span>
                     </div>
-                    <button class="btn-danger" style="font-size:10px" onclick="removeS(${index})">Delete</button>
+                    <div style="display:flex; gap:5px;">
+                        <button class="tool-btn" style="font-size:10px; border-color:var(--accent); color:var(--accent);" onclick="duplicateS(${index})">Duplicate</button>
+                        <button class="btn-danger" style="font-size:10px" onclick="removeS(${index})">Delete</button>
+                    </div>
                     </div>
                     <div id="s_body_${index}" class="collapsible-body">
                         <div class="input-container">
@@ -571,6 +589,11 @@
             document.body.setAttribute('data-theme', themes[currentThemeIdx]);
             document.getElementById('themeBtn').innerText = `🌓 Theme: ${themes[currentThemeIdx].charAt(0).toUpperCase() + themes[currentThemeIdx].slice(1)}`;
         }
+    </script>
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js');
+    }
     </script>
 </body>
 
