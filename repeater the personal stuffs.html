@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --box-bg: #ffffff;
+            --border: #e2e8f0;
+            --btn-bg: #ffffff;
+            --btn-border: #cbd5e1;
+            --accent: #3b82f6;
+            --range-bg: #f1f5f9;
+            --out-bg: #0f172a;
+            --out-text: #e2e8f0;
+            --sep-accent: #f59e0b;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --btn-inactive: #f1f5f9;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --text: #f1f5f9;
+            --box-bg: #1e293b;
+            --border: #334155;
+            --btn-bg: #334155;
+            --btn-border: #475569;
+            --accent: #60a5fa;
+            --range-bg: #0f172a;
+            --btn-inactive: #1e293b;
+        }
+
+        [data-theme="gray"] {
+            --bg: #334155;
+            --text: #f8fafc;
+            --box-bg: #475569;
+            --border: #64748b;
+            --btn-bg: #64748b;
+            --btn-border: #94a3b8;
+            --accent: #94a3b8;
+            --range-bg: #1e293b;
+            --out-bg: #0f172a;
+            --btn-inactive: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.5;
+            padding: 15px;
+            max-width: 700px;
+            margin: auto;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.2s ease;
+        }
+
+        .header-card {
+            background: var(--box-bg);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            margin-bottom: 20px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .master-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .input-container {
+            position: relative;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            min-height: 60px;
+            resize: vertical;
+            padding: 10px;
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            outline: none;
+        }
+
+        .clear-btn {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            font-size: 16px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.3;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .clear-btn.primed {
+            transform: scale(1.2);
+            opacity: 1;
+            box-shadow: 0 0 8px var(--danger);
+        }
+
+        .clear-btn::after {
+            content: '×';
+        }
+
+        .section-box {
+            border: 1px solid var(--border);
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            background: var(--box-bg);
+            position: relative;
+        }
+
+        .sep-box {
+            border: 1px dashed var(--sep-accent);
+            background: var(--box-bg);
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        button {
+            cursor: pointer;
+            padding: 5px 12px;
+            border: 1px solid var(--btn-border);
+            background: var(--btn-bg);
+            color: var(--text);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+        }
+
+        .btn-danger {
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .quick-tools {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .tool-btn {
+            font-size: 10px;
+            padding: 3px 8px;
+            background: var(--range-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .logic-btn {
+            border: 1px solid var(--btn-border);
+            background: var(--btn-inactive);
+            color: var(--text);
+            opacity: 0.6;
+        }
+
+        .logic-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            opacity: 1;
+        }
+
+        .collapse-btn {
+            font-size: 14px;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            border: none;
+            background: var(--range-bg);
+            color: var(--text);
+            padding: 0;
+            line-height: 1;
+        }
+
+        .collapsed-content {
+            display: none !important;
+        }
+
+        .range-inputs {
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--range-bg);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            width: fit-content;
+        }
+
+        input[type="number"] {
+            background: var(--box-bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 3px;
+            width: 45px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        #output {
+            background: var(--out-bg);
+            color: var(--out-text);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 13px;
+            min-height: 80px;
+            white-space: pre-wrap;
+            font-family: 'Fira Code', monospace;
+            margin-top: 10px;
+            border: 1px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .generate-btn {
+            background: var(--success);
+            color: white;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-top: 20px;
+            border: none;
+        }
+
+        select {
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: var(--btn-bg);
+            color: var(--text);
+            border: 1px solid var(--btn-border);
+            font-size: 12px;
+            outline: none;
+        }
+
+        .order-card {
+            padding: 10px;
+            background: var(--box-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+        }
+    </style>
+</head>
+
+<body onload="renderUI()">
+
+    <div class="header-card">
+        <div class="header-top">
+            <h3 style="margin:0; font-size: 18px;">Text Studio</h3>
+            <div style="display:flex; gap:8px;">
+                <select id="sepMode" onchange="renderUI()">
+                    <option value="disabled">Separators Off</option>
+                    <option value="universal" selected>Universal Sep</option>
+                    <option value="custom">Custom Sep</option>
+                </select>
+                <button onclick="cycleTheme()" id="themeBtn">🌓 Theme: Light</button>
+            </div>
+        </div>
+        <div class="master-bar">
+            <button onclick="toggleAll(true)">▲ Collapse All</button>
+            <button onclick="toggleAll(false)">▼ Expand All</button>
+        </div>
+    </div>
+
+    <div class="section-box" style="border-left: 4px solid var(--accent);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom: 5px;">
+            <button class="collapse-btn toggle-icon" onclick="toggleCollapse('start_body', this)">▼</button>
+            <b style="font-size:11px; text-transform:uppercase; opacity:0.7;">Start Block</b>
+        </div>
+        <div id="start_body" class="collapsible-body">
+            <div class="input-container">
+                <textarea id="header_text" placeholder="Start Header Placeholder"></textarea>
+                <div class="clear-btn" onclick="smartClear(this, 'header_text')"></div>
+            </div>
+            <div class="quick-tools">
+                <button class="tool-btn" onclick="insertAtCursor('header_text', '\\n')">+ Line</button>
+                <button class="tool-btn" onclick="insertAtCursor('header_text', '\\t')">+ Tab</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainContainer"></div>
+    <button onclick="addSentence()" class="btn-primary" style="width: 100%; padding: 10px; margin: 10px 0;">+ Add
+        Sentence Block</button>
+
+    <div class="section-box" style="border-left: 4px solid var(--danger);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom: 5px;">
+            <button class="collapse-btn toggle-icon" onclick="toggleCollapse('end_body', this)">▼</button>
+            <b style="font-size:11px; text-transform:uppercase; opacity:0.7;">End Block</b>
+        </div>
+        <div id="end_body" class="collapsible-body">
+            <div class="input-container">
+                <textarea id="footer_text" placeholder="End Footer Placeholder"></textarea>
+                <div class="clear-btn" onclick="smartClear(this, 'footer_text')"></div>
+            </div>
+            <div class="quick-tools">
+                <button class="tool-btn" onclick="insertAtCursor('footer_text', '\\n')">+ Line</button>
+                <button class="tool-btn" onclick="insertAtCursor('footer_text', '\\t')">+ Tab</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="order-card">
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <b style="font-size: 11px; opacity: 0.6; text-transform: uppercase;">Sequence & Logic</b>
+            <select id="globalLogic" onchange="applyGlobalLogic(this.value)">
+                <option value="custom">Logic: Custom</option>
+                <option value="i">Logic: All Increase</option>
+                <option value="r">Logic: All Repeat</option>
+            </select>
+        </div>
+        <div id="orderList"></div>
+    </div>
+
+    <button onclick="generate()" class="generate-btn">GENERATE OUTPUT</button>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+        <b style="font-size: 12px; text-transform: uppercase; opacity: 0.6;">Console Output</b>
+        <div style="display:flex; gap:8px;">
+            <button id="copyBtn" onclick="copyOutput()" class="btn-primary" disabled>Copy</button>
+            <button id="clearConsoleBtn" onclick="clearConsole()" class="btn-danger" style="background:transparent;"
+                disabled>Clear Console</button>
+        </div>
+    </div>
+    <pre id="output"></pre>
+
+    <script>
+        let sentences = [{ id: Date.now(), name: "Sentence 1", content: "", start: 1, end: 3, mode: 'i' }];
+        let customSeps = {}, disabledSeps = {}, universalSep = { text: "---", disabled: false };
+        let lastClickTime = 0, currentThemeIdx = 0, themes = ['light', 'dark', 'gray'];
+
+        function insertAtCursor(id, val, idx = -1) {
+            const el = document.getElementById(id);
+            const start = el.selectionStart, end = el.selectionEnd, text = el.value;
+            el.value = text.substring(0, start) + val + text.substring(end);
+            el.selectionStart = el.selectionEnd = start + val.length;
+            el.focus();
+            if (idx !== -1) sentences[idx].content = el.value;
+        }
+
+        function toggleCollapse(bodyId, btn) {
+            const isCollapsed = document.getElementById(bodyId).classList.toggle('collapsed-content');
+            btn.innerText = isCollapsed ? "▲" : "▼";
+        }
+
+        function toggleAll(collapse) {
+            document.querySelectorAll('.collapsible-body').forEach(b => collapse ? b.classList.add('collapsed-content') : b.classList.remove('collapsed-content'));
+            document.querySelectorAll('.toggle-icon').forEach(i => i.innerText = collapse ? "▲" : "▼");
+        }
+
+        function clearConsole() {
+            document.getElementById('output').textContent = '';
+            toggleConsoleButtons(false);
+        }
+
+        function toggleConsoleButtons(active) {
+            document.getElementById('copyBtn').disabled = !active;
+            document.getElementById('clearConsoleBtn').disabled = !active;
+        }
+
+        function generate() {
+            const mode = document.getElementById('sepMode').value;
+            const hInput = document.getElementById('header_text');
+            const hText = (hInput.value).replace(/\\n/g, "\n").replace(/\\t/g, "\t");
+            const fInput = document.getElementById('footer_text');
+            const fText = (fInput.value).replace(/\\n/g, "\n").replace(/\\t/g, "\t");
+
+            let outputs = [];
+            sentences.forEach((s, idx) => {
+                let block = "";
+                const ta = document.getElementById(`ta_s_${idx}`);
+                const contentRaw = ta.value || ta.placeholder;
+                const finalContent = contentRaw.replace(/\\n/g, "\n").replace(/\\t/g, "\t");
+                for (let v = s.start; v <= s.end; v++) {
+                    block += finalContent.replace(/{}/g, s.mode === 'i' ? v : s.start) + "\n";
+                }
+                outputs.push(block.trim());
+            });
+
+            let final = hText + "\n";
+            for (let i = 0; i < outputs.length; i++) {
+                final += outputs[i];
+                if (i < outputs.length - 1 && mode !== 'disabled') {
+                    const isC = (mode === 'custom');
+                    const sepTa = document.getElementById(`ta_sep_${i}`);
+                    const sepText = isC ? (sepTa.value || sepTa.placeholder) : (universalSep.text || "---");
+                    const dis = isC ? !!disabledSeps[i] : universalSep.disabled;
+                    if (!dis) final += "\n" + sepText.replace(/\\n/g, "\n").replace(/\\t/g, "\t") + "\n";
+                    else final += "\n";
+                }
+            }
+            final += "\n" + fText;
+            const outBox = document.getElementById('output');
+            outBox.textContent = final.trim();
+            toggleConsoleButtons(outBox.textContent.length > 0);
+        }
+
+        function copyOutput() {
+            const out = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(out);
+            const btn = document.getElementById('copyBtn');
+            btn.innerText = "✓ Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
+        }
+
+        function smartClear(btn, targetId, isDataRef = false, dataIdx = -1, isSep = false) {
+            const now = Date.now();
+            if (now - lastClickTime < 800) {
+                if (isDataRef) {
+                    if (isSep) { if (document.getElementById('sepMode').value === 'custom') customSeps[dataIdx] = ''; else universalSep.text = ''; }
+                    else { sentences[dataIdx].content = ''; }
+                }
+                document.getElementById(targetId).value = '';
+                btn.classList.remove('primed');
+                lastClickTime = 0;
+            } else {
+                btn.classList.add('primed'); lastClickTime = now;
+                setTimeout(() => { if (Date.now() - lastClickTime >= 800) btn.classList.remove('primed'); }, 800);
+            }
+        }
+
+        function renderUI() {
+            const container = document.getElementById('mainContainer'), mode = document.getElementById('sepMode').value;
+            container.innerHTML = '';
+            sentences.forEach((s, index) => {
+                const sBlock = document.createElement('div');
+                sBlock.className = 'section-box';
+                sBlock.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <button class="collapse-btn toggle-icon" onclick="toggleCollapse('s_body_${index}', this)">▼</button>
+                        <span contenteditable="true" onblur="sentences[${index}].name=this.innerText; renderOrder()">${s.name}</span>
+                    </div>
+                    <button class="btn-danger" style="font-size:10px" onclick="removeS(${index})">Delete</button>
+                    </div>
+                    <div id="s_body_${index}" class="collapsible-body">
+                        <div class="input-container">
+                            <textarea id="ta_s_${index}" oninput="sentences[${index}].content=this.value" placeholder="Sentence ${index + 1} Placeholder Content {}">${s.content}</textarea>
+                            <div class="clear-btn" onclick="smartClear(this, 'ta_s_${index}', true, ${index}, false)"></div>
+                        </div>
+                        <div class="quick-tools">
+                            <button class="tool-btn" onclick="insertAtCursor('ta_s_${index}', '\\n', ${index})">+ Line</button>
+                            <button class="tool-btn" onclick="insertAtCursor('ta_s_${index}', '\\t', ${index})">+ Tab</button>
+                            <button class="tool-btn" onclick="insertAtCursor('ta_s_${index}', '{}', ${index})">+ Series {}</button>
+                        </div>
+                        <div class="range-inputs"><span>Count:</span> <input type="number" value="${s.start}" onchange="sentences[${index}].start=parseInt(this.value)"> <span>to</span> <input type="number" value="${s.end}" onchange="sentences[${index}].end=parseInt(this.value)"></div>
+                    </div>`;
+                container.appendChild(sBlock);
+                if (index < sentences.length - 1 && mode !== 'disabled') {
+                    const isC = (mode === 'custom'), val = isC ? (customSeps[index] || "") : universalSep.text, dis = isC ? !!disabledSeps[index] : universalSep.disabled;
+                    const sepDiv = document.createElement('div');
+                    sepDiv.className = 'sep-box';
+                    sepDiv.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            ${!dis ? `<button class="collapse-btn toggle-icon" onclick="toggleCollapse('sep_body_${index}', this)">▼</button>` : ''}
+                            <span style="font-size:10px; opacity:0.6;">SEPARATOR</span>
+                        </div>
+                        <label style="font-size:11px; cursor:pointer;"><input type="checkbox" ${dis ? 'checked' : ''} onchange="toggleSep(${index}, this.checked)"> Skip</label>
+                    </div>
+                    <div id="sep_body_${index}" class="collapsible-body ${dis ? 'collapsed-content' : ''}">
+                        <div class="input-container"><textarea id="ta_sep_${index}" oninput="updateSep(${index}, this.value)" style="min-height:40px" placeholder="---">${val}</textarea><div class="clear-btn" onclick="smartClear(this, 'ta_sep_${index}', true, ${index}, true)"></div></div>
+                        <div class="quick-tools"><button class="tool-btn" onclick="insertAtCursor('ta_sep_${index}', '\\n')">+ Line</button></div>
+                    </div>`;
+                    container.appendChild(sepDiv);
+                }
+            });
+            renderOrder();
+        }
+
+        function updateSep(i, v) { if (document.getElementById('sepMode').value === 'custom') customSeps[i] = v; else universalSep.text = v; }
+        function toggleSep(i, v) { if (document.getElementById('sepMode').value === 'custom') disabledSeps[i] = v; else universalSep.disabled = v; renderUI(); }
+
+        function addSentence() {
+            const last = sentences[sentences.length - 1];
+            const newCount = sentences.length + 1; // Logic: 1 + current count
+            sentences.push({
+                id: Date.now(),
+                name: "Sentence " + newCount,
+                content: "",
+                start: (last ? last.end + 1 : 1),
+                end: (last ? last.end + 3 : 3),
+                mode: 'i'
+            });
+            renderUI();
+        }
+
+        function removeS(i) {
+            if (sentences.length > 1) {
+                sentences.splice(i, 1);
+                renderUI();
+            }
+        }
+
+        function move(i, d) { [sentences[i], sentences[i + d]] = [sentences[i + d], sentences[i]]; renderUI(); }
+        function applyGlobalLogic(v) { if (v !== 'custom') sentences.forEach(s => s.mode = v); renderOrder(); }
+
+        function renderOrder() {
+            const list = document.getElementById('orderList'); list.innerHTML = '';
+            sentences.forEach((s, i) => {
+                const item = document.createElement('div'); item.className = 'order-item';
+                item.innerHTML = `<span style="font-size:12px;">${s.name}</span><div style="display:flex; gap:6px;">
+                    <button class="logic-btn ${s.mode === 'i' ? 'active' : ''}" onclick="sentences[${i}].mode='i'; renderOrder()">Inc</button>
+                    <button class="logic-btn ${s.mode === 'r' ? 'active' : ''}" onclick="sentences[${i}].mode='r'; renderOrder()">Rep</button>
+                    <button onclick="move(${i}, -1)" ${i === 0 ? 'disabled' : ''}>↑</button><button onclick="move(${i}, 1)" ${i === sentences.length - 1 ? 'disabled' : ''}>↓</button></div>`;
+                list.appendChild(item);
+            });
+            const firstMode = sentences[0].mode;
+            document.getElementById('globalLogic').value = sentences.every(s => s.mode === firstMode) ? firstMode : 'custom';
+        }
+
+        function cycleTheme() {
+            currentThemeIdx = (currentThemeIdx + 1) % themes.length;
+            document.body.setAttribute('data-theme', themes[currentThemeIdx]);
+            document.getElementById('themeBtn').innerText = `🌓 Theme: ${themes[currentThemeIdx].charAt(0).toUpperCase() + themes[currentThemeIdx].slice(1)}`;
+        }
+    </script>
+</body>
+
+</html>
