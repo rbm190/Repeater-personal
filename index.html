@@ -483,19 +483,28 @@
         }
 
         function duplicateS(i) {
-            // Create a deep copy of the sentence object
-            const original = sentences[i];
-            const duplicate = {
-                ...original,
-                id: Date.now(),
-                name: original.name + " (Copy)",
-                // We use the same content and range settings
-            };
+                const original = sentences[i];
 
-            // Insert the duplicate immediately after the original
-            sentences.splice(i + 1, 0, duplicate);
-            renderUI();
-        }
+                // Calculate the range length of the original (e.g., 1 to 3 is a length of 2)
+                const rangeLength = original.end - original.start;
+
+                // New start begins immediately after the original end
+                const newStart = original.end + 1;
+                // New end maintains the same span/length
+                const newEnd = newStart + rangeLength;
+
+                const duplicate = {
+                    ...original,
+                    id: Date.now(),
+                    name: original.name + " (Copy)",
+                    start: newStart,
+                    end: newEnd
+                };
+
+                // Insert the duplicate immediately after the original
+                sentences.splice(i + 1, 0, duplicate);
+                renderUI();
+            }
 
         function renderUI() {
             const container = document.getElementById('mainContainer'), mode = document.getElementById('sepMode').value;
